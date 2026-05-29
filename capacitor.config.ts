@@ -4,11 +4,6 @@ const config: CapacitorConfig = {
   appId: 'br.com.barcelosnanet.app',
   appName: 'Barcelos na NET',
   webDir: 'www',
-  server: {
-    url: 'https://barcelosnanet.com.br',
-    cleartext: false,
-    androidScheme: 'https',
-  },
   android: {
     allowMixedContent: false,
     captureInput: true,
@@ -16,16 +11,16 @@ const config: CapacitorConfig = {
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 2500,
+      launchShowDuration: 0,
       launchAutoHide: true,
-      backgroundColor: '#1a1a2e',
+      backgroundColor: '#0a1628',
       androidSplashResourceName: 'splash',
       androidScaleType: 'CENTER_CROP',
       showSpinner: false,
     },
     StatusBar: {
       style: 'DARK',
-      backgroundColor: '#1a1a2e',
+      backgroundColor: '#0a1628',
     },
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],
