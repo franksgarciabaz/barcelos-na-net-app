@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Barcelos na NET</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green:  #2ecc71;
+    --teal:   #00b5a0;
+    --dark:   #0a1628;
+    --mid:    #0d2137;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--dark);
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    overflow: hidden;
+  }
+
+  /* ── SPLASH ── */
+  #splash {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: linear-gradient(160deg, #0a1628 0%, #0d2c3a 50%, #0a2420 100%);
+    z-index: 100;
+    transition: opacity .5s ease, transform .5s ease;
+  }
+
+  #splash.hide {
+    opacity: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+  }
+
+  /* Círculos de fundo decorativos */
+  .bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: .18;
+    animation: float 6s ease-in-out infinite;
+  }
+  .bg-circle.c1 { width: 300px; height: 300px; background: #00b5a0; top: -80px; right: -60px; animation-delay: 0s; }
+  .bg-circle.c2 { width: 200px; height: 200px; background: #2ecc71; bottom: 60px; left: -40px; animation-delay: 2s; }
+  .bg-circle.c3 { width: 150px; height: 150px; background: #c8e000; top: 40%; left: 10%; animation-delay: 4s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-20px); }
+  }
+
+  /* Logo */
+  .logo-wrap {
+    position: relative;
+    animation: popIn .7s cubic-bezier(.175,.885,.32,1.275) both;
+    animation-delay: .2s;
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(.5); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .logo-glow {
+    position: absolute; inset: -20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,181,160,.35) 0%, transparent 70%);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: .7; }
+    50%       { transform: scale(1.15); opacity: 1; }
+  }
+
+  .logo-img {
+    width: 120px; height: 120px;
+    border-radius: 24px;
+    display: block;
+    position: relative;
+    filter: drop-shadow(0 8px 32px rgba(0,181,160,.5));
+  }
+
+  /* Textos */
+  .app-name {
+    color: #fff;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+    margin-top: 24px;
+    animation: fadeUp .6s ease both;
+    animation-delay: .5s;
+  }
+
+  .app-tagline {
+    color: rgba(255,255,255,.5);
+    font-size: 13px;
+    font-weight: 400;
+    margin-top: 6px;
+    letter-spacing: .5px;
+    animation: fadeUp .6s ease both;
+    animation-delay: .65s;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Barra de loading */
+  .progress-wrap {
+    width: 160px;
+    height: 3px;
+    background: rgba(255,255,255,.1);
+    border-radius: 10px;
+    margin-top: 48px;
+    overflow: hidden;
+    animation: fadeUp .6s ease both;
+    animation-delay: .8s;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #00b5a0, #2ecc71);
+    border-radius: 10px;
+    width: 0%;
+    animation: loading 2.2s ease forwards;
+    animation-delay: .9s;
+  }
+
+  @keyframes loading {
+    0%   { width: 0%; }
+    40%  { width: 60%; }
+    70%  { width: 82%; }
+    100% { width: 100%; }
+  }
+
+  /* Versão */
+  .app-version {
+    position: absolute;
+    bottom: 40px;
+    color: rgba(255,255,255,.2);
+    font-size: 11px;
+    animation: fadeUp .6s ease both;
+    animation-delay: 1s;
+  }
+
+  /* ── WEBVIEW ── */
+  #webview-wrap {
+    position: fixed; inset: 0;
+    opacity: 0;
+    transition: opacity .4s ease;
+  }
+
+  #webview-wrap.show { opacity: 1; }
+
+  #site-frame {
+    width: 100%; height: 100%;
+    border: none;
+    background: #fff;
+  }
+
+  /* ── OFFLINE ── */
+  #offline {
+    display: none;
+    position: fixed; inset: 0;
+    background: linear-gradient(160deg, #0a1628, #0d2c3a);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    padding: 40px;
+  }
+
+  #offline.show { display: flex; }
+
+  .offline-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    animation: shake 1s ease .3s;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: rotate(0); }
+    20%       { transform: rotate(-10deg); }
+    40%       { transform: rotate(10deg); }
+    60%       { transform: rotate(-6deg); }
+    80%       { transform: rotate(6deg); }
+  }
+
+  .offline-title {
+    font-size: 22px; font-weight: 700; margin-bottom: 10px;
+  }
+
+  .offline-sub {
+    font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.6; margin-bottom: 32px;
+  }
+
+  .btn-retry {
+    background: linear-gradient(135deg, #00b5a0, #2ecc71);
+    color: #fff; border: none;
+    padding: 14px 36px; border-radius: 50px;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,181,160,.4);
+    transition: transform .15s, box-shadow .15s;
+  }
+
+  .btn-retry:active {
+    transform: scale(.95);
+    box-shadow: 0 2px 10px rgba(0,181,160,.3);
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <div class="bg-circle c1"></div>
+  <div class="bg-circle c2"></div>
+  <div class="bg-circle c3"></div>
+
+  <div class="logo-wrap">
+    <div class="logo-glow"></div>
+    <img class="logo-img" src="logo.png" alt="Barcelos na NET"/>
+  </div>
+
+  <div class="app-name">Barcelos na NET</div>
+  <div class="app-tagline">NOTÍCIAS • CULTURA • ENTRETENIMENTO</div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progress"></div>
+  </div>
+
+  <div class="app-version">v1.0.2</div>
+</div>
+
+<!-- OFFLINE -->
+<div id="offline">
+  <div class="offline-icon">📡</div>
+  <div class="offline-title">Sem conexão</div>
+  <div class="offline-sub">Verifique sua internet e<br/>tente novamente.</div>
+  <button class="btn-retry" onclick="retry()">Tentar novamente</button>
+</div>
+
+<script>
+  const splash  = document.getElementById('splash');
+  const offline = document.getElementById('offline');
+  const SITE    = 'https://barcelosnanet.com.br';
+
+  function goToSite() {
+    splash.classList.add('hide');
+    setTimeout(() => { window.location.href = SITE; }, 500);
+  }
+
+  function showOffline() {
+    splash.classList.add('hide');
+    offline.classList.add('show');
+  }
+
+  function retry() {
+    offline.classList.remove('show');
+    splash.classList.remove('hide');
+    setTimeout(checkLoad, 300);
+  }
+
+  function checkLoad() {
+    if (!navigator.onLine) { showOffline(); return; }
+    // Barra de loading termina em ~3.1s, aí navega
+    setTimeout(goToSite, 3100);
+  }
+
+  window.addEventListener('offline', showOffline);
+  checkLoad();
+</script>
+</body>
+</html>
