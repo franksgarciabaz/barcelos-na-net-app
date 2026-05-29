@@ -1,0 +1,32 @@
+{
+  "name": "barcelos-na-net",
+  "version": "1.0.0",
+  "description": "App oficial do Barcelos na NET - Notícias, entretenimento e cultura",
+  "main": "index.js",
+  "scripts": {
+    "sync": "npx cap sync",
+    "add:android": "npx cap add android",
+    "open:android": "npx cap open android"
+  },
+  "keywords": [
+    "barcelos",
+    "noticias",
+    "entretenimento"
+  ],
+  "author": "Frank Garcia",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@capacitor/android": "^8.3.4",
+    "@capacitor/app": "^8.1.0",
+    "@capacitor/cli": "^8.3.4",
+    "@capacitor/core": "^8.3.4",
+    "@capacitor/push-notifications": "^8.1.1",
+    "@capacitor/splash-screen": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.2",
+    "canvas": "^3.2.3"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}
